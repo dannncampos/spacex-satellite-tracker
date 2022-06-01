@@ -1,3 +1,4 @@
+pip==20.2.3
 fastapi==0.75.1
 uvicorn==0.17.6
 cryptography==36.0.2
@@ -6,3 +7,4 @@ fastapi-SQLAlchemy==0.2.1
 PyMySQL==1.0.2
 pandas==1.4.2
 pydantic==1.8.2
+pytest~=5.4.1
