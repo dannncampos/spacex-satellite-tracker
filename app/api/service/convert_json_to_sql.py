@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import sqlalchemy
 
 from app.config.db import engine
 from app.config.general import settings
@@ -26,4 +27,8 @@ def load_data_frame_to_database(file_path: str):
                                     con=engine,
                                     index=True,
                                     if_exists='replace',
-                                    index_label=settings.TABLE_INDEX)
+                                    index_label=settings.TABLE_INDEX,
+                                    dtype={'spacetrack_creation_date': sqlalchemy.DateTime(),
+                                    'longitude': sqlalchemy.types.Float(precision=3, asdecimal=True),
+                                    'latitude': sqlalchemy.types.Float(precision=3, asdecimal=True),
+                                    'id': sqlalchemy.types.VARCHAR(length=255)})
