@@ -1,29 +1,37 @@
 """Test Tracker Satellite"""
+from test import tools_for_testing
 from datetime import datetime
+
 import pytest
 
-from app.api.service.service_tracker_satellite import TrackerSatellite
-from test import tools_for_testing
+from api.domain.schemas.schema_satellite import SatelliteRequest, SatelliteResponse
+from app.api.service.service_satellite_tracker  import TrackerSatellite
 
 
 @pytest.mark.parametrize(
-    "satellite_id, creation_date, expected",
+    "input_test, expected",
     [
-        ("5eed770f096e590006985613", datetime(2022, 1, 26, 13, 26, 11), ["14", "-24.712922471107795")
+        (
+            SatelliteRequest(
+              satellite_id = "5eed770f096e590006985613",
+              given_time = datetime(2022, 6, 5, 13, 26, 11)
+          ),
+            SatelliteResponse(
+                satellite_id = "5eed770f096e590006985613",
+                creation_date = datetime(2022, 1, 26, 13, 26, 11),
+                latitude = -24.7129,
+                longitude = 14,
+            )
+        )
     ]
 )
-def test_get_satellite_by_id(satellite_id: str, creation_date: datetime, expected: list):
-    """Test method get satellite by id
+def test_get_satellite_position(input_test: SatelliteRequest, expected: SatelliteResponse):
+    """Test method get last known satellite position
 
     Args:
-        satellite_id (str): The satellite ID from Spacex launch
-        creation_date (date): The creation date
-        expected (list): The expected result
+        input_test (SatelliteRequest): The satellite ID from Spacex launch for a given time
+        expected (SatelliteResponse): The last known position of a satellite by ID
     """
-    tools_for_testing.check_return(
-        TrackerSatellite(satellite_id).get_satellite_by_id(creation_date),
-        expected
-    )
+    result = TrackerSatellite(input_test).get_satellite_position()
 
-
-
+    tools_for_testing.check_return(result, expected)

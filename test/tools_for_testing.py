@@ -7,7 +7,7 @@ def does_not_raise():
     yield
 
 
-def check_return(input_, expected, in_composition=False)
+def check_return(input_, expected, in_composition=False):
     if not in_composition:
         assert input_ == expected
     else:
