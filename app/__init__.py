@@ -11,4 +11,6 @@ dictConfig(LogConfig().dict())
 
 logger = logging.getLogger("fastapi")
 
+db_url = settings.CONNECTION_STR
+
 Base = declarative_base()

@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     PASSWORD = getenv('MYSQL_PASSWORD')
     TABLE_INDEX = getenv('MYSQL_TABLE_INDEX')
     DATA_FOLDER = getenv('DATA_FOLDER')
+    CONNECTION_STR = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
 
 
 settings = Settings()
