@@ -1,15 +1,21 @@
 """Satellite Request Module"""
 from typing import Optional
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-class HellowWorldRequest(BaseModel):
-    """This is a sample model to request a HellowWorld"""
-    hellow_world_id: str = Field(..., description='Hellow World ID')
+class SatelliteRequest(BaseModel):
+    """This is a sample model to request a Satellite information by ID"""
+    satellite_id: str = Field(..., description="The Satellite ID")
+    given_time: Optional[datetime] = Field(
+                                        datetime.now(),
+                                        description="The given time for a last known position"
+                                    )
 
 
-class HellowWorldResponse(BaseModel):
-    """This is a sample model for HellowWorld response"""
-    hellow_world_id: str
-    hellow_world_msg: str
-    is_hellow_world: bool
+class SatelliteResponse(BaseModel):
+    """This is a sample model for Satellite Tracker response"""
+    satellite_id: str
+    creation_date: datetime
+    latitude: float
+    longitude: float

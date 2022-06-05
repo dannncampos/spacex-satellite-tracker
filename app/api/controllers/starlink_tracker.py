@@ -2,35 +2,39 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from app import logger
-from app.api.domain.schemas.schema_satellite import HellowWorldRequest, \
-                                                HellowWorldResponse
-from app.api.service.service_sample import get_hellow_world
-
+from app.api.domain.schemas.schema_satellite import SatelliteRequest,\
+                                                    SatelliteResponse
+from app.api.service.service_satellite_tracker import TrackerSatellite
 
 
 router = APIRouter()
 
-ID = {"01": {"teste"}}
 
 
-@router.get("/satellite/{id}")
-async def get_satellite_by_id(id: str):
-    """Get satellite ID from BD
+@router.get("/satellite/position/", response_model=SatelliteResponse)
+async def get_satellite_position_by_id(request_model: SatelliteRequest = Depends()):
+    """Get last known satellite position by ID
 
     Args:
-        id (str): The ID of the satellite
+        request_model (SatelliteResponse, optional): The ID of the satellite. Defaults to Depends().
 
     Raises:
-        HTTPException: An exception ocurred. Something went wrong!
+        HTTPException: An exception ocurred. Satellite not found!
 
     Returns:
-        dict: The JSON dict with the search details
+        response_model (SatelliteResponse): The last known satellite position by a given time.
     """
 
-    if id not in ID:
+    logger.info("Getting last known satellite position for %s", request_model.satellite_id)
+
+    satellite = TrackerSatellite(request_model)
+
+    response = satellite.get_satellite_position()
+
+    if not response:
         raise HTTPException(
             status_code=404,
-            detail="Satellite ID not found"
+            detail="Satellite position not found"
             )
 
-    return {"satellite": ID[id]}
+    return response
