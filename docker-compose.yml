@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  spacex-satellite-mysql:
+    image: mysql:8.0.17
+    networks:
+      - deploy_network
+    environment:
+      MYSQL_DATABASE: satellite
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3308:3306"
+    container_name: spacex-satellite-mysql
+    security_opt:
+      - seccomp:unconfined
+  admin:    
+    image: adminer
+    ports:
+      - "8080:8080"
+  spacex-satellite-api:
+    build: ./app
+    depends_on:
+      - spacex-satellite-mysql
+    ports:
+      - 8000:8000
+    networks:
+      - deploy_network
+    environment:
+      - MYSQL_HOST=database
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=satellite
+      - MYSQL_TABLE=startlink_historical_data
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_TABLE_INDEX=row_id
+      - PYTHONPATH=./:app
+      - DATA_FOLDER=app/data/
+    links:
+      - "spacex-satellite-mysql:database"
+    container_name: spacex-satellite-api
+    restart: on-failure
+
+networks:
+    deploy_network:
+        driver: bridge
