@@ -29,6 +29,6 @@ def load_data_frame_to_database(file_path: str):
                                     if_exists='replace',
                                     index_label=settings.TABLE_INDEX,
                                     dtype={'spacetrack_creation_date': sqlalchemy.DateTime(),
-                                    'longitude': sqlalchemy.types.Float(precision=3, asdecimal=True),
-                                    'latitude': sqlalchemy.types.Float(precision=3, asdecimal=True),
+                                    'longitude': sqlalchemy.types.Float(precision=15, asdecimal=True),
+                                    'latitude': sqlalchemy.types.Float(precision=15, asdecimal=True),
                                     'id': sqlalchemy.types.VARCHAR(length=255)})
