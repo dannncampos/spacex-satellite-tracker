@@ -41,5 +41,8 @@ class ClosestSatelliteResponse(BaseModel):
     creation_date: datetime
     latitude: float
     longitude: float
+    given_latitude: float
+    given_longitude: float
+    given_time: datetime
     distance: float
     unit: str
