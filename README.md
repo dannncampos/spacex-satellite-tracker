@@ -8,16 +8,31 @@
 
 ## Description
 
-Query attributes about SpaceX launches to determine the last known latitude/longitude of the satellite for a given time.
+Query attributes about SpaceX launches to determine the last known latitude/longitude of the satellite for a given time and the closest satellite by a given time and position.
 
-### Server Build
+## Endpoints:
+
+| Endpoint                                        | Description                                                                               |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Get satellite position                          | Last known satellite position by ID and time.                                             |
+| Get closest satellite                           | The closest satellite by given time and position on a globe as latitude and longitude     |
+
+## Server Build
 
     docker-compose build && docker-compose up -d
 
-### Testing Spacex Satellite Tracking API
+## Testing Spacex Satellite Tracking API
 
-After building the docker image and creating the container, access the address in your browser for Swagger documentations: http://127.0.0.1/docs and for Redoc documentations: http://127.0.0.1/redoc
+After building the docker image and creating the container, access the address in your browser.
 
-### Load Tests
+- Swagger documentations: http://127.0.0.1/docs
+- Redoc documentations: http://127.0.0.1/redoc
 
-$ pytest {arquivo}
+## Query to determine the last known latitude and longitude of the satellite for a given time
+
+    SELECT *
+    FROM startlink_historical_data
+    WHERE satellite_id='<str satellite_id>' and spacetrack_creation_date<='<datetime given_time>'
+    ORDER BY spacetrack_creation_date
+    DESC
+    LIMIT 1;
